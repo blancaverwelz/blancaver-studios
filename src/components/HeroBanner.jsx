@@ -160,7 +160,7 @@ function Rain() {
  */
 export default function HeroBanner({
   image,
-  titleLines = ['Blancaver', 'Studios'],
+  titleLines = ['Blancaver', 'STUDIOS'],
   animateTitle = false,
   subtitle,
   align = 'left',

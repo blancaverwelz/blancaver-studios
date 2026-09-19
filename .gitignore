@@ -22,3 +22,4 @@ pnpm-debug.log*
 public/images/brand-banner.original.jpg
 yarn-debug.log*
 yarn-error.log*
+/docs/

@@ -8,11 +8,12 @@ export default function Toolkit() {
     <main>
       <div className="relative">
         <HeroBanner
-          image={heroImage}
-          titleLines={['Blancaver Studios', 'Tool Kit']}
-          animateTitle={false}
-          align="center"
-        />
+  image={heroImage}
+  titleLines={['TOOL KIT']}
+  subtitle="Blancaver Studios"
+  animateTitle={false}
+  align="center"
+/>
         <div className="section-fade section-fade--out" aria-hidden />
       </div>
       <ToolkitContent />

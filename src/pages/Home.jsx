@@ -13,7 +13,7 @@ export default function Home() {
       <div className="section-block">
         <HeroBanner
           image={heroImage}
-          titleLines={['Blancaver', 'Studios']}
+          titleLines={['Blancaver', 'STUDIOS']}
           animateTitle
           align="mid-left"
           imageFocus="figure-right"
