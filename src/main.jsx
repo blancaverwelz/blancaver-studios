@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 
-// Match Vite `base` so client routes work under /blncvr-studios/
+// Match Vite `base` so client routes work under /blancaver-studios/
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
 
 createRoot(document.getElementById('root')).render(

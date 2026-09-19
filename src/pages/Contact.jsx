@@ -25,7 +25,7 @@ export default function Contact() {
       <ContactSection />
 
       <footer className="border-t border-white/5 py-8 text-center text-xs text-white/30">
-        © 2026 BLNCVR Studios
+        © 2026 Blancaver Studios
       </footer>
     </main>
   )

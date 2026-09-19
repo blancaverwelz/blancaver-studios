@@ -60,7 +60,7 @@ function AnimatedTitle({ lines, animate, align = 'left' }) {
     <div className={`flex flex-col gap-2 sm:gap-3 select-none ${alignClass}`}>
       {lines.map((line, lineIndex) => {
         const isMulti = lines.length > 1
-        // Primary brand line first (e.g. BLNCVR); following lines slightly smaller (e.g. Studios)
+        // Primary brand line first (e.g. Blancaver); following lines slightly smaller (e.g. Studios)
         const isPrimary = !isMulti || lineIndex === 0
         const isSecondary = isMulti && lineIndex > 0
         return (
@@ -160,7 +160,7 @@ function Rain() {
  */
 export default function HeroBanner({
   image,
-  titleLines = ['BLNCVR', 'Studios'],
+  titleLines = ['Blancaver', 'Studios'],
   animateTitle = false,
   subtitle,
   align = 'left',

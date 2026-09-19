@@ -13,7 +13,7 @@ export default function Home() {
       <div className="section-block">
         <HeroBanner
           image={heroImage}
-          titleLines={['BLNCVR', 'Studios']}
+          titleLines={['Blancaver', 'Studios']}
           animateTitle
           align="mid-left"
           imageFocus="figure-right"
@@ -35,7 +35,7 @@ export default function Home() {
       <WhyChooseUs />
 
       <footer className="border-t border-white/5 py-8 text-center text-xs text-white/30">
-        © 2026 BLNCVR Studios
+        © 2026 Blancaver Studios
       </footer>
     </main>
   )

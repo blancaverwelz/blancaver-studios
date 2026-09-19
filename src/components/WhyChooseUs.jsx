@@ -23,7 +23,7 @@ export default function WhyChooseUs() {
 
         <div className="pt-2 lg:pt-4">
           <p className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-[0.25em] text-[var(--color-neon-teal)] uppercase">
-            Why Choose BLNCVR Studios
+            Why Choose Blancaver Studios
             <span aria-hidden>↗</span>
           </p>
           <h2 className="text-3xl leading-tight font-extrabold text-white sm:text-4xl md:text-5xl">

@@ -1,5 +1,5 @@
 {
-  "name": "blncvr-studios",
+  "name": "blancaver-studios",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "deploy:check": "vite build && echo 'Open dist/index.html asset paths — they should start with /blncvr-studios/'"
+    "deploy:check": "vite build && echo 'Open dist/index.html asset paths — they should start with /blancaver-studios/'"
   },
   "dependencies": {
     "lucide-react": "^1.24.0",

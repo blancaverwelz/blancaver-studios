@@ -9,7 +9,7 @@ export default function Toolkit() {
       <div className="relative">
         <HeroBanner
           image={heroImage}
-          titleLines={['BLNCVR Studios', 'Tool Kit']}
+          titleLines={['Blancaver Studios', 'Tool Kit']}
           animateTitle={false}
           align="center"
         />
@@ -17,7 +17,7 @@ export default function Toolkit() {
       </div>
       <ToolkitContent />
       <footer className="border-t border-white/5 py-8 text-center text-xs text-white/30">
-        © 2026 BLNCVR Studios
+        © 2026 Blancaver Studios
       </footer>
     </main>
   )

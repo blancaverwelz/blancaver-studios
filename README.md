@@ -1,6 +1,6 @@
-# BLNCVR Studios
+# Blancaver Studios
 
-Personal portfolio site for **BLNCVR Studios** — React + Vite, Tailwind CSS, plain JavaScript
+Personal portfolio site for **Blancaver Studios** — React + Vite, Tailwind CSS, plain JavaScript
 (no TypeScript), Lucide icons, Three.js for the animated emblem.
 
 ## Pages
@@ -71,4 +71,4 @@ committing a `docs/` folder.
 Build settings live in `vercel.json` (output directory + SPA rewrites) and
 `vite.config.js` — don't need to touch either unless the build setup changes.
 
-Live site: **https://blncvr-studios.vercel.app**
+Live site: **https://blancaver-studios.vercel.app/**

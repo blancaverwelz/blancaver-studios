@@ -8,7 +8,7 @@
 // Environment Variables, never committed to the repo):
 //   RECAPTCHA_SECRET_KEY   Google reCAPTCHA v3 secret key
 //   RESEND_API_KEY         Resend API key
-//   RESEND_FROM_EMAIL      Verified sender, e.g. "BLNCVR Studios <contact@blncvr.studio>"
+//   RESEND_FROM_EMAIL      Verified sender, e.g. "Blancaver Studios<onboarding@resend.dev>"
 //   RESEND_TO_EMAIL        Where submissions should land (the client's inbox)
 
 const RECAPTCHA_SCORE_THRESHOLD = 0.5
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
 
   const resendApiKey = process.env.RESEND_API_KEY
   const toEmail = process.env.RESEND_TO_EMAIL
-  const fromEmail = process.env.RESEND_FROM_EMAIL || 'BLNCVR Studios <onboarding@resend.dev>'
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'Blancaver Studios <onboarding@resend.dev>'
 
   if (!resendApiKey || !toEmail) {
     console.error('Contact form is missing RESEND_API_KEY or RESEND_TO_EMAIL.')
@@ -113,7 +113,7 @@ export default async function handler(req, res) {
 
   const html = `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;">
-      <h2 style="margin:0 0 16px;">New message from blncvr-studios.vercel.app</h2>
+      <h2 style="margin:0 0 16px;">New message from Blancaver Studios</h2>
       <table cellpadding="0" cellspacing="0" style="margin-bottom:20px;">${rows}</table>
       <p style="color:#8a8a90;font-size:13px;margin:0 0 4px;">What they need help with</p>
       <p style="white-space:pre-wrap;font-size:14px;line-height:1.6;margin:0 0 20px;">${escapeHtml(message)}</p>

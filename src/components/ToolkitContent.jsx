@@ -43,7 +43,7 @@ export default function ToolkitContent() {
   return (
     <section className="tk-wrap">
       <p className="tk-eyebrow">Behind The Build</p>
-      <h2 className="tk-heading">The Toolkit Powering Every BLNCVR Studios Project</h2>
+      <h2 className="tk-heading">The Toolkit Powering Every Blancaver Studios Project</h2>
 
       <div className="tk-group">
         <div className="tk-group-label">Core Stack</div>

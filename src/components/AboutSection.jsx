@@ -86,7 +86,7 @@ export default function AboutSection() {
       <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
           <p className="mb-3 flex items-center gap-2 text-xs font-semibold tracking-[0.25em] text-[var(--color-neon-teal)] uppercase">
-            About BLNCVR Studios
+            About Blancaver Studios
             <span aria-hidden>↗</span>
           </p>
           <h2 className="text-3xl leading-tight font-extrabold text-white sm:text-4xl md:text-5xl">
@@ -94,7 +94,7 @@ export default function AboutSection() {
           </h2>
           <div className="mt-6 flex gap-4 border-l-2 border-[var(--color-neon-teal)] pl-5">
             <p className="text-sm leading-relaxed text-white/60 sm:text-base">
-              BLNCVR Studios builds premium digital experiences through vibe coding—
+              Blancaver Studios builds premium digital experiences through vibe coding—
               creating web apps, interactive 3D websites, and immersive web experiences with
               AI-powered development. From concept to deployment, every project blends
               rapid iteration, thoughtful design, and real product strategy to transform
