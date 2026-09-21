@@ -163,6 +163,8 @@ export default function HeroBanner({
   titleLines = ['Blancaver', 'STUDIOS'],
   animateTitle = false,
   subtitle,
+  tagline,
+  mobileTitleLower = false,
   align = 'left',
   /**
    * Background position strategy for the hero image.
@@ -243,7 +245,9 @@ export default function HeroBanner({
               : isCenter
                 ? 'mx-auto text-center'
                 : isMidLeft
-                  ? 'mx-auto -translate-y-6 pl-6 sm:-translate-y-10 sm:pl-12 md:pl-16 lg:pl-20'
+                  ? `mx-auto ${
+    mobileTitleLower ? 'translate-y-32 sm:translate-y-0' : '-translate-y-6'
+  } pl-6 sm:-translate-y-10 sm:pl-12 md:pl-16 lg:pl-20`
                   : 'mx-auto pb-14 sm:pb-20'
           }`}
         >
@@ -261,10 +265,20 @@ export default function HeroBanner({
                 </p>
               )}
               <AnimatedTitle
-                lines={titleLines}
-                animate={animateTitle}
-                align={isCenter ? 'center' : 'left'}
-              />
+  lines={titleLines}
+  animate={animateTitle}
+  align={isCenter ? 'center' : 'left'}
+/>
+
+{tagline && (
+  <p
+    className={`mt-5 text-sm font-medium tracking-[0.12em] text-[#FFD301] sm:mt-6 sm:text-base ${
+      isCenter ? 'text-center' : ''
+    }`}
+  >
+    {tagline}
+  </p>
+)}
             </>
           )}
         </div>

@@ -13,10 +13,12 @@ export default function Home() {
       <div className="section-block">
         <HeroBanner
           image={heroImage}
-          titleLines={['Blancaver', 'STUDIOS']}
-          animateTitle
-          align="mid-left"
-          imageFocus="figure-right"
+  titleLines={['Blancaver', 'STUDIOS']}
+  tagline="Create What's Next."
+  mobileTitleLower
+  animateTitle
+  align="mid-left"
+  imageFocus="figure-right"
         />
         <div className="section-fade section-fade--out" aria-hidden />
       </div>
