@@ -1,7 +1,7 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-neon-pink: #9e1a0f;
   --color-neon-teal: #ffd301;
   --color-void: #05060a;
@@ -173,8 +173,18 @@ body {
 
 .hero-fog {
   background:
-    linear-gradient(180deg, transparent 0%, rgba(10, 14, 28, 0.15) 35%, rgba(8, 10, 20, 0.45) 70%, transparent 100%),
-    radial-gradient(ellipse 120% 50% at 50% 70%, rgba(80, 100, 160, 0.25) 0%, transparent 70%);
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(10, 14, 28, 0.15) 35%,
+      rgba(8, 10, 20, 0.45) 70%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 120% 50% at 50% 70%,
+      rgba(80, 100, 160, 0.25) 0%,
+      transparent 70%
+    );
   animation: fog-drift 12s ease-in-out infinite alternate;
 }
 
@@ -199,7 +209,12 @@ body {
   position: absolute;
   top: -12%;
   width: 1px;
-  background: linear-gradient(to bottom, transparent, rgba(180, 210, 255, 0.55), transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(180, 210, 255, 0.55),
+    transparent
+  );
   animation: rain-fall linear infinite;
 }
 
@@ -296,7 +311,9 @@ body {
   box-shadow: none;
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .nav-glass {
     background: rgba(12, 12, 14, 0.94);
   }
@@ -322,7 +339,11 @@ body {
   inset: 0;
   border-radius: 28px;
   background:
-    radial-gradient(circle at 30% 30%, rgba(255, 211, 1, 0.35), transparent 60%),
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 211, 1, 0.35),
+      transparent 60%
+    ),
     radial-gradient(circle at 70% 70%, rgba(158, 26, 15, 0.28), transparent 60%);
   filter: blur(40px);
   animation: about-glow-pulse 5s ease-in-out infinite;
@@ -352,7 +373,9 @@ body {
     var(--color-neon-pink),
     var(--color-neon-teal)
   );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0.55;
@@ -492,10 +515,14 @@ body {
 }
 
 .unique-card::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 211, 1, 0.08), rgba(158, 26, 15, 0.08));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 211, 1, 0.08),
+    rgba(158, 26, 15, 0.08)
+  );
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
@@ -548,8 +575,20 @@ body {
   position: relative;
   width: 100%;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
 }
 
 .tk-marquee-track {
@@ -591,7 +630,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: radial-gradient(ellipse 120% 100% at 50% 0%, rgba(255, 211, 1, 0.06), transparent 60%);
+  background: radial-gradient(
+    ellipse 120% 100% at 50% 0%,
+    rgba(255, 211, 1, 0.06),
+    transparent 60%
+  );
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
   padding: 40px 60px;
@@ -619,7 +662,7 @@ body {
 }
 
 .tk-ring::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -8px;
   border-radius: 50%;
@@ -707,7 +750,7 @@ body {
 
 .tk-ai-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -735,7 +778,7 @@ body {
 }
 
 .tk-ai-card-border::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -60%;
   z-index: 0;
@@ -989,13 +1032,17 @@ body {
 }
 
 .nav-link::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: -3px;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, var(--color-neon-teal), var(--color-neon-pink));
+  background: linear-gradient(
+    90deg,
+    var(--color-neon-teal),
+    var(--color-neon-pink)
+  );
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.3s ease;
@@ -1037,7 +1084,9 @@ body {
 
 /* Contact form card — slight lift on hover, per "Cards: slight lift on hover" */
 .contact-card {
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 .contact-card:hover {
@@ -1071,7 +1120,9 @@ body {
   color: #f5f5f7;
   outline: none;
   position: relative;
-  transition: border-color 0.25s ease, background-color 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
 }
 
 .field-input::placeholder {
@@ -1123,28 +1174,34 @@ select.field-input option {
 /* Magnetic hover + subtle ripple on the primary CTA, per
    "Buttons: magnetic hover, subtle ripple" */
 .magnetic-btn {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease;
   will-change: transform;
   position: relative;
   overflow: hidden;
 }
 
 .magnetic-btn::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(circle, rgba(5, 6, 10, 0.18) 0%, transparent 65%);
   opacity: 0;
   transform: scale(0.6);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
   pointer-events: none;
 }
 
 .magnetic-btn:active::after {
   opacity: 1;
   transform: scale(1.4);
-  transition: opacity 0s, transform 0s;
+  transition:
+    opacity 0s,
+    transform 0s;
 }
 
 /* ============================================================
@@ -1155,7 +1212,9 @@ select.field-input option {
   max-height: 0;
   overflow: hidden;
   opacity: 0;
-  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  transition:
+    max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease;
 }
 
 .mobile-nav-menu.is-open {
@@ -1206,7 +1265,10 @@ select.field-input option {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.02);
   padding: 1rem;
-  transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .service-card:hover {
@@ -1225,7 +1287,10 @@ select.field-input option {
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.7);
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .service-card:hover .service-card-icon {
@@ -1265,13 +1330,17 @@ select.field-input option {
 }
 
 .process-line::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   width: 100%;
   transform: scaleY(0);
   transform-origin: top;
-  background: linear-gradient(180deg, var(--color-neon-pink), var(--color-neon-teal));
+  background: linear-gradient(
+    180deg,
+    var(--color-neon-pink),
+    var(--color-neon-teal)
+  );
   transition: transform 2.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
 }
 
@@ -1287,7 +1356,9 @@ select.field-input option {
   gap: 1rem;
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .process-timeline.is-visible .process-step {
@@ -1393,7 +1464,9 @@ select.field-input option {
   cursor: pointer;
   text-align: center;
   pointer-events: auto;
-  transition: opacity 0.4s ease, transform 0.2s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.2s ease;
   will-change: transform;
 }
 
@@ -1417,7 +1490,7 @@ select.field-input option {
 }
 
 .services-label::after {
-  content: '';
+  content: "";
   display: block;
   width: 3px;
   height: 3px;
@@ -1460,7 +1533,11 @@ select.field-input option {
   right: 0;
   bottom: 0;
   transform: translateY(100%);
-  background: linear-gradient(180deg, rgba(10, 12, 20, 0.4), rgba(5, 6, 10, 0.96) 30%);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 12, 20, 0.4),
+    rgba(5, 6, 10, 0.96) 30%
+  );
   backdrop-filter: blur(14px);
   border-top: 1px solid rgba(255, 211, 1, 0.25);
   padding: 1.8rem 2rem 2rem;
@@ -1514,7 +1591,9 @@ select.field-input option {
   font-size: 1rem;
   cursor: pointer;
   flex-shrink: 0;
-  transition: border-color 0.25s ease, color 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
 .services-close-btn:hover {
@@ -1602,7 +1681,9 @@ select.field-input option {
   height: 6px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.25);
-  transition: background 0.25s ease, transform 0.25s ease;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
 }
 
 .services-dot.active {
@@ -1702,7 +1783,10 @@ select.field-input option {
   appearance: none;
   font: inherit;
   color: inherit;
-  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease,
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
     transform 0.3s ease;
 }
 
@@ -1711,7 +1795,9 @@ select.field-input option {
   transform: translateY(-2px);
   border-color: rgba(255, 211, 1, 0.45);
   background: rgba(255, 211, 1, 0.05);
-  box-shadow: 0 0 18px rgba(255, 211, 1, 0.18), inset 0 0 0 1px rgba(255, 211, 1, 0.12);
+  box-shadow:
+    0 0 18px rgba(255, 211, 1, 0.18),
+    inset 0 0 0 1px rgba(255, 211, 1, 0.12);
 }
 
 .service-card:focus-visible {
@@ -1720,7 +1806,10 @@ select.field-input option {
 }
 
 .service-card .service-card-icon {
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .service-card:hover .service-card-icon,
@@ -1734,7 +1823,10 @@ select.field-input option {
   overflow: hidden;
   opacity: 0;
   transform: translateY(2px);
-  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    max-height 0.3s ease;
 }
 
 .service-card.is-open .service-card-desc {
@@ -1819,5 +1911,22 @@ select.field-input option {
 @media (min-width: 1024px) {
   .process-timeline {
     gap: 2.25rem;
+  }
+}
+
+/* Center Toolkit headings on mobile */
+@media (max-width: 520px) {
+  .tk-wrap .tk-eyebrow,
+  .tk-wrap .tk-heading,
+  .tk-wrap .tk-group-label {
+    text-align: center;
+    margin-inline: auto;
+  }
+}
+
+/* Center development tool tabs on mobile */
+@media (max-width: 520px) {
+  .tk-tabs {
+    justify-content: center;
   }
 }

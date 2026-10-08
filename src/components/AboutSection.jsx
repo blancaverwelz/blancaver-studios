@@ -37,7 +37,11 @@ function CodeGraphic() {
             strokeWidth="1"
             strokeDasharray="2 6"
           />
-          <circle r="3" fill="var(--color-neon-teal)" className="about-orbit-particle">
+          <circle
+            r="3"
+            fill="var(--color-neon-teal)"
+            className="about-orbit-particle"
+          >
             <animateMotion
               dur="12s"
               repeatCount="indefinite"
@@ -64,7 +68,14 @@ function CodeGraphic() {
           <path d="M280 130 L330 200 L280 270" />
         </g>
         <g className="about-tick-wrap">
-          <line x1="185" y1="120" x2="165" y2="280" stroke="rgba(255,255,255,0.35)" strokeWidth="1.5" />
+          <line
+            x1="185"
+            y1="120"
+            x2="165"
+            y2="280"
+            stroke="rgba(255,255,255,0.35)"
+            strokeWidth="1.5"
+          />
         </g>
         <g className="about-pulse-dot">
           <circle cx="200" cy="200" r="6" fill="var(--color-neon-teal)" />
@@ -77,7 +88,7 @@ function CodeGraphic() {
         </g>
       </svg>
     </div>
-  )
+  );
 }
 
 export default function AboutSection() {
@@ -94,16 +105,16 @@ export default function AboutSection() {
           </h2>
           <div className="mt-6 flex gap-4 border-l-2 border-[var(--color-neon-teal)] pl-5">
             <p className="text-sm leading-relaxed text-white/60 sm:text-base">
-              Blancaver Studios builds premium digital experiences through vibe coding—
-              creating web apps, interactive 3D websites, and immersive web experiences with
-              AI-powered development. From concept to deployment, every project blends
-              rapid iteration, thoughtful design, and real product strategy to transform
-              ambitious ideas into polished, high-performing digital products.
+              Blancaver Studios creates premium digital experiences powered by
+              AI-assisted development. We build web apps, interactive 3D
+              websites, and immersive web experiences that combine thoughtful
+              design, rapid iteration, and real product strategy—from initial
+              concept through deployment.
             </p>
           </div>
         </div>
         <CodeGraphic />
       </div>
     </section>
-  )
+  );
 }
