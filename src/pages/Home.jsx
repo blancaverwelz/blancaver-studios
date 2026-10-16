@@ -1,11 +1,15 @@
-import HeroBanner from '../components/HeroBanner'
-import BrandBanner from '../components/BrandBanner'
-import ProjectSlider from '../components/ProjectSlider'
-import AboutSection from '../components/AboutSection'
-import WhatIDo from '../components/WhatIDo'
-import WhyChooseUs from '../components/WhyChooseUs'
+import HeroBanner from "../components/HeroBanner";
+import BrandBanner from "../components/BrandBanner";
+import ProjectSlider from "../components/ProjectSlider";
+import AboutSection from "../components/AboutSection";
+import WhatIDo from "../components/WhatIDo";
+import WhyChooseUs from "../components/WhyChooseUs";
+import WebsiteBenefits from "../components/WebsiteBenefits";
+import BrandIdentityBenefits from "../components/BrandIdentityBenefits";
+import MotionDesignBenefits from "../components/MotionDesignBenefits";
+import ThreeDInteractiveBenefits from "../components/ThreeDInteractiveBenefits";
 
-const heroImage = `${import.meta.env.BASE_URL}images/hero-home.jpg`
+const heroImage = `${import.meta.env.BASE_URL}images/hero-home.jpg`;
 
 export default function Home() {
   return (
@@ -13,12 +17,12 @@ export default function Home() {
       <div className="section-block">
         <HeroBanner
           image={heroImage}
-  titleLines={['Blancaver', 'STUDIOS']}
-  tagline="Create What's Next."
-  mobileTitleLower
-  animateTitle
-  align="mid-left"
-  imageFocus="figure-right"
+          titleLines={["Blancaver", "STUDIOS"]}
+          tagline="Create What's Next."
+          mobileTitleLower
+          animateTitle
+          align="mid-left"
+          imageFocus="figure-right"
         />
         <div className="section-fade section-fade--out" aria-hidden />
       </div>
@@ -35,10 +39,14 @@ export default function Home() {
       <AboutSection />
       <WhatIDo />
       <WhyChooseUs />
+      <WebsiteBenefits />
+      <BrandIdentityBenefits />
+      <MotionDesignBenefits />
+      <ThreeDInteractiveBenefits />
 
       <footer className="border-t border-white/5 py-8 text-center text-xs text-white/30">
         © 2026 Blancaver Studios
       </footer>
     </main>
-  )
+  );
 }

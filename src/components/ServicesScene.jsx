@@ -838,6 +838,17 @@ export default function ServicesScene({ services }) {
                 </button>
               </div>
               <p>{services[activeIndex].desc}</p>
+
+              {services[activeIndex].benefitsId && (
+                <a
+                  href={`#${services[activeIndex].benefitsId}`}
+                  aria-label={`Learn more about ${services[activeIndex].title}`}
+                  className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--color-neon-teal)] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-neon-teal)]"
+                >
+                  Learn more
+                  <span aria-hidden="true">↗</span>
+                </a>
+              )}
             </>
           )}
         </div>
