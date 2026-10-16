@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Clock, KeyRound, ShieldCheck } from "lucide-react";
+import ScrollReveal from "./ScrollReveal";
 
 const benefits = [
   {
@@ -33,7 +34,7 @@ export default function WebsiteBenefits() {
     >
       <div className="mx-auto max-w-7xl">
         {/* Introduction and example website */}
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
+        <ScrollReveal className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14">
           <div className="min-w-0">
             <p className="mb-6 flex items-center gap-3 text-[10px] leading-relaxed font-semibold tracking-[0.22em] text-white/70 uppercase sm:text-xs">
               <span
@@ -76,13 +77,15 @@ export default function WebsiteBenefits() {
               NORTHLINE AUTO — illustrative website concept.
             </figcaption>
           </figure>
-        </div>
+        </ScrollReveal>
 
         {/* Three business benefits */}
         <div className="mt-14 border-y border-white/15 py-8 sm:mt-16 sm:py-10">
           <ul className="grid gap-8 md:grid-cols-3 md:gap-0">
             {benefits.map(({ icon: Icon, title, description }, index) => (
-              <li
+              <ScrollReveal
+                as="li"
+                delay={index * 90}
                 key={title}
                 className={`flex min-w-0 items-start gap-4 ${
                   index > 0
@@ -106,13 +109,13 @@ export default function WebsiteBenefits() {
                     {description}
                   </p>
                 </div>
-              </li>
+              </ScrollReveal>
             ))}
           </ul>
         </div>
 
         {/* Closing statement and contact CTA */}
-        <div className="mt-10 flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
+        <ScrollReveal className="mt-10 flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
           <div className="max-w-3xl">
             <h3 className="text-2xl leading-tight font-bold tracking-[-0.025em] text-white sm:text-3xl">
               Your Business Deserves More Than a Social Media Page.
@@ -135,7 +138,7 @@ export default function WebsiteBenefits() {
               className="transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 motion-reduce:transition-none"
             />
           </Link>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

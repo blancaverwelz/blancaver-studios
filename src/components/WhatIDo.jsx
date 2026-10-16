@@ -1,5 +1,5 @@
-import { services } from '../data/services'
-import ServicesScene from './ServicesScene'
+import { services } from "../data/services";
+import ServicesScene from "./ServicesScene";
 
 export default function WhatIDo() {
   return (
@@ -11,7 +11,7 @@ export default function WhatIDo() {
       <div className="services-void">
         <div className="text-center mb-14">
           <span className="text-xs font-semibold tracking-[0.3em] text-[var(--color-neon-teal)] uppercase">
-            What I Do
+            What We Do
           </span>
           <h2 className="mt-5 text-[clamp(2.25rem,6vw,4.25rem)] leading-[1.02] font-extrabold tracking-[-0.03em] text-white">
             Tailoring unique solutions for your next breakthrough.
@@ -21,5 +21,5 @@ export default function WhatIDo() {
         <ServicesScene services={services} />
       </div>
     </section>
-  )
+  );
 }

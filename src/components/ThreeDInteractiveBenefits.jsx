@@ -46,9 +46,11 @@ export default function ThreeDInteractiveBenefits() {
               id="three-d-interactive-benefits-heading"
               className="text-4xl leading-[1.06] font-extrabold tracking-[-0.045em] text-white sm:text-5xl xl:text-6xl"
             >
-              Show More of What You Offer with{" "}
+              Show More of What You Offer with <br />
               <span className="text-[var(--color-neon-teal)]">
-                3D &amp; Interactive.
+                3D &amp; Interactive
+                <br />
+                Experience.
               </span>
             </h2>
 

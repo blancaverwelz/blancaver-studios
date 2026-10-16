@@ -31,14 +31,13 @@ export default function Home() {
         <BrandBanner />
       </div>
 
+      <AboutSection />
+      <WhatIDo />
+      <WhyChooseUs />
       <div className="section-block">
         <div className="section-fade section-fade--in" aria-hidden />
         <ProjectSlider />
       </div>
-
-      <AboutSection />
-      <WhatIDo />
-      <WhyChooseUs />
       <WebsiteBenefits />
       <BrandIdentityBenefits />
       <MotionDesignBenefits />
