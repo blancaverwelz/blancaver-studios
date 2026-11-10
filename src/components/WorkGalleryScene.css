@@ -1,0 +1,32 @@
+.work-archive-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #080b0d;
+}
+.work-archive-scene > img,
+.work-archive-scene > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.work-archive-scene > img {
+  object-fit: cover;
+  object-position: 60% center;
+}
+.work-archive-scene > canvas {
+  z-index: 1;
+}
+@media (max-width: 767px) {
+  .work-archive-scene > img {
+    object-position: 83% center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-archive-scene > canvas {
+    display: none;
+  }
+}

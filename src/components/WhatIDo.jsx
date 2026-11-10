@@ -1,25 +1,41 @@
+import { memo } from "react";
 import { services } from "../data/services";
 import ServicesScene from "./ServicesScene";
 
-export default function WhatIDo() {
+function WhatIDo({
+  journey = false,
+  scrollIndex,
+  active = true,
+  exitProgress = 0,
+}) {
   return (
-    <section className="relative mx-auto max-w-5xl px-5 py-24 sm:px-8 sm:py-32">
+    <section
+      className={`services-overview relative mx-auto max-w-5xl px-5 py-24 sm:px-8 sm:py-32${journey ? " services-overview--journey" : ""}`}
+    >
       {/* Single continuous void backdrop: heading, floating shapes, and hint
           text all live inside this one wrapper (see .services-void in
           index.css) instead of the heading sitting outside a separate
           boxed "stage" card. */}
       <div className="services-void">
         <div className="text-center mb-14">
-          <span className="text-xs font-semibold tracking-[0.3em] text-[var(--color-neon-teal)] uppercase">
-            What We Do
-          </span>
-          <h2 className="mt-5 text-[clamp(2.25rem,6vw,4.25rem)] leading-[1.02] font-extrabold tracking-[-0.03em] text-white">
-            Tailoring unique solutions for your next breakthrough.
+          <span className="services-void__eyebrow">What We Do</span>
+          <h2 id="studio-services-heading" tabIndex={-1}>
+            Tailoring unique <br />
+            solutions for your
+            <br />
+            <span>next breakthrough</span>
           </h2>
         </div>
 
-        <ServicesScene services={services} />
+        <ServicesScene
+          active={active}
+          services={services}
+          scrollIndex={scrollIndex}
+          exitProgress={exitProgress}
+        />
       </div>
     </section>
   );
 }
+
+export default memo(WhatIDo);

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Clock, KeyRound, ShieldCheck } from "lucide-react";
+import WebsiteChapter from "./WebsiteChapter";
 import ScrollReveal from "./ScrollReveal";
 
 const benefits = [
@@ -23,9 +24,10 @@ const benefits = [
   },
 ];
 
-const previewImage = `${import.meta.env.BASE_URL}images/northline-auto.png`;
+const previewImage = `${import.meta.env.BASE_URL}images/northline-auto-optimized.webp`;
 
-export default function WebsiteBenefits() {
+export default function WebsiteBenefits({ journey = false, progress = 0, active = true, preload = false, exitProgress = 0 }) {
+  if (journey) return <WebsiteChapter benefits={benefits} progress={progress} active={active} preload={preload} exitProgress={exitProgress} />;
   return (
     <section
       id="web-design-development"
@@ -64,9 +66,11 @@ export default function WebsiteBenefits() {
             <div className="overflow-hidden rounded-sm border border-white/20 bg-[#141414]">
               <img
                 src={previewImage}
+                srcSet={`${import.meta.env.BASE_URL}images/northline-auto-optimized-640.webp 640w, ${import.meta.env.BASE_URL}images/northline-auto-optimized-960.webp 960w, ${previewImage} 1501w`}
+                sizes="(min-width: 1280px) 576px, (min-width: 1024px) 45vw, 90vw"
                 alt="Concept website for NORTHLINE AUTO, featuring automotive services and a clear booking call to action."
-                width={1200}
-                height={840}
+                width={1501}
+                height={1048}
                 loading="lazy"
                 decoding="async"
                 className="block h-auto w-full"

@@ -1,3 +1,4 @@
+import BrandChapter from "./BrandChapter";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, LayoutTemplate, ScanEye, Store } from "lucide-react";
 
@@ -22,9 +23,25 @@ const benefits = [
   },
 ];
 
-const previewImage = `${import.meta.env.BASE_URL}images/marlow-salon.png`;
+const previewImage = `${import.meta.env.BASE_URL}images/marlow-salon-optimized.webp`;
 
-export default function BrandIdentityBenefits() {
+export default function BrandIdentityBenefits({
+  journey = false,
+  progress = 0,
+  preload = false,
+  active = true,
+  exitProgress = 0,
+}) {
+  if (journey)
+    return (
+      <BrandChapter
+        benefits={benefits}
+        progress={progress}
+        preload={preload}
+        active={active}
+        exitProgress={exitProgress}
+      />
+    );
   return (
     <section
       id="brand-identity"
@@ -65,9 +82,11 @@ export default function BrandIdentityBenefits() {
             <div className="overflow-hidden rounded-sm border border-white/20 bg-[#141414]">
               <img
                 src={previewImage}
+                srcSet={`${import.meta.env.BASE_URL}images/marlow-salon-optimized-640.webp 640w, ${import.meta.env.BASE_URL}images/marlow-salon-optimized-960.webp 960w, ${previewImage} 1536w`}
+                sizes="(min-width: 1280px) 576px, (min-width: 1024px) 45vw, 90vw"
                 alt="Marlow Salon brand identity concept showing a matching storefront sign, appointment cards, and social media post."
-                width={1592}
-                height={990}
+                width={1536}
+                height={1024}
                 loading="lazy"
                 decoding="async"
                 className="block h-auto w-full"
@@ -129,7 +148,7 @@ export default function BrandIdentityBenefits() {
             to="/contact"
             className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-sm bg-[var(--color-neon-teal)] px-6 py-4 text-sm font-bold tracking-[0.025em] text-[var(--color-void)] uppercase transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-neon-teal)] sm:w-auto sm:justify-self-start lg:col-start-1 lg:row-start-1"
           >
-            Let’s Talk About Your Brand
+            Let’s Shape Your Brand
             <ArrowUpRight
               aria-hidden="true"
               size={20}

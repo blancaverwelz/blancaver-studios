@@ -1,0 +1,34 @@
+.motion-preview-art {
+  container-type: inline-size;
+}
+.motion-preview-art__headline {
+  position: absolute;
+  top: 17%;
+  left: 6%;
+  z-index: 10;
+  font-size: 11cqw;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: #fff4de;
+}
+.motion-preview-art__details {
+  position: absolute;
+  top: 66%;
+  left: 6%;
+  z-index: 20;
+  width: 45%;
+  border-top: 1px solid #fff4dea6;
+  padding-top: 3cqw;
+}
+.motion-preview-art .motion-preview-art__details p {
+  color: #e9e5dc;
+  font-size: clamp(8px, 2.4cqw, 14px);
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  max-width: none;
+}
+.motion-preview-art__hours {
+  margin-top: 1.2cqw;
+}

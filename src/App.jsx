@@ -1,11 +1,35 @@
-import { useLayoutEffect, useRef } from 'react'
+import { lazy, Suspense, useLayoutEffect, useRef } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import AmbientVoidBackground from './components/AmbientVoidBackground'
 import Home from './pages/Home'
-import Projects from './pages/Projects'
-import Toolkit from './pages/Toolkit'
-import Contact from './pages/Contact'
+
+const Projects = lazy(() => import('./pages/Projects'))
+const Toolkit = lazy(() => import('./pages/Toolkit'))
+const Contact = lazy(() => import('./pages/Contact'))
+
+// Size the scene before first paint, even while the browser controls are expanded.
+function usePortraitScreenHeight() {
+  useLayoutEffect(() => {
+    const portrait = matchMedia("(pointer: coarse) and (orientation: portrait)");
+    const style = document.documentElement.style;
+    function sync() {
+      if (portrait.matches && window.screen.height > 0) {
+        style.setProperty("--portrait-screen-height", window.screen.height + "px");
+      } else {
+        style.removeProperty("--portrait-screen-height");
+      }
+    }
+    sync();
+    portrait.addEventListener("change", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      portrait.removeEventListener("change", sync);
+      window.removeEventListener("resize", sync);
+      style.removeProperty("--portrait-screen-height");
+    };
+  }, []);
+}
 
 function ScrollManager() {
   const { pathname, search, hash, key } = useLocation()
@@ -52,17 +76,20 @@ function ScrollManager() {
 }
 
 export default function App() {
+  usePortraitScreenHeight();
   return (
     <div className="page-bg">
       <AmbientVoidBackground />
       <Navbar />
-      <ScrollManager />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/toolkit" element={<Toolkit />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
+      <Suspense fallback={<main className="min-h-screen px-5 pt-32 text-white/70" role="status">Loading page…</main>}>
+        <ScrollManager />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/toolkit" element={<Toolkit />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Suspense>
     </div>
   )
 }

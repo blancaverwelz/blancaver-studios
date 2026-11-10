@@ -1,25 +1,31 @@
-import HeroBanner from '../components/HeroBanner'
-import ToolkitContent from '../components/ToolkitContent'
-
-const heroImage = `${import.meta.env.BASE_URL}images/hero-projects.jpg`
+import ToolkitContent from "../components/ToolkitContent";
+import ToolkitScene from "../components/ToolkitScene";
+import "./Toolkit.css";
 
 export default function Toolkit() {
   return (
-    <main>
-      <div className="relative">
-        <HeroBanner
-  image={heroImage}
-  titleLines={['TOOL KIT']}
-  subtitle="Blancaver Studios"
-  animateTitle={false}
-  align="center"
-/>
-        <div className="section-fade section-fade--out" aria-hidden />
-      </div>
+    <main className="toolkit-page">
+      <header className="toolkit-hero">
+        <ToolkitScene />
+        <div className="toolkit-hero__copy">
+          <h1>
+            Tool<span>kit</span>
+          </h1>
+          <p className="toolkit-hero__description">
+            The technology behind the craft.
+          </p>
+          <a className="toolkit-explore" href="#toolkit-equipment">
+            Explore the toolkit <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+        <span className="toolkit-hero__signature" aria-hidden="true">
+          BLANCAVER STUDIOS - ENGINEERING
+        </span>
+      </header>
       <ToolkitContent />
-      <footer className="border-t border-white/5 py-8 text-center text-xs text-white/30">
-        © 2026 Blancaver Studios
+      <footer className="site-copyright">
+        © {new Date().getFullYear()} Blancaver Studios
       </footer>
     </main>
-  )
+  );
 }

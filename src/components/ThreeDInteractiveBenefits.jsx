@@ -1,5 +1,6 @@
+import SpatialChapter from "./SpatialChapter";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Box, Rotate3d, SwatchBook } from "lucide-react";
+import { Box, Rotate3d, SwatchBook } from "lucide-react";
 import ChairPreview from "./ChairPreview";
 
 const benefits = [
@@ -23,7 +24,25 @@ const benefits = [
   },
 ];
 
-export default function ThreeDInteractiveBenefits() {
+export default function ThreeDInteractiveBenefits({
+  journey = false,
+  progress = 0,
+  entrance = 1,
+  preload = false,
+  exitProgress = 0,
+  active = true,
+}) {
+  if (journey)
+    return (
+      <SpatialChapter
+        benefits={benefits}
+        progress={progress}
+        entrance={entrance}
+        preload={preload}
+        exitProgress={exitProgress}
+        active={active}
+      />
+    );
   return (
     <section
       id="3d-interactive"
@@ -111,17 +130,8 @@ export default function ThreeDInteractiveBenefits() {
             </p>
           </div>
 
-          <Link
-            to="/contact"
-            className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-sm bg-[var(--color-neon-teal)] px-6 py-4 text-sm font-bold tracking-[0.025em] text-[var(--color-void)] uppercase transition-colors hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-neon-teal)] sm:w-auto sm:justify-self-start lg:col-start-1 lg:row-start-1"
-          >
-            Let’s Explore the Possibilities
-            <ArrowUpRight
-              aria-hidden="true"
-              size={20}
-              strokeWidth={2}
-              className="transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5 motion-reduce:transition-none"
-            />
+          <Link to="/contact" className="spatial-chapter__cta">
+            Explore 3D Experiences
           </Link>
         </div>
       </div>

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { useLocation } from 'react-router-dom'
 
 // Sitewide ambient backdrop — generic starfield/dust only, no labels, no
 // interaction, no bloom/postprocessing. Mounted once at the app root behind
 // all page content, visible from ProjectSlider downward on every page.
 //
-// This runs continuously on every route (it can't pause on scroll the way
-// ServicesScene does via IntersectionObserver, since it's meant to always be
-// visible), so it is deliberately much cheaper than ServicesScene/EmblemScene:
+// Pause while the opaque homepage journey covers the entire viewport.
+// Elsewhere the backdrop is deliberately cheaper than ServicesScene/EmblemScene:
 // no EffectComposer, capped pixel ratio, low point count, and a hard pause
 // on document.visibilitychange when the tab isn't active.
 const PARTICLE_COUNT = 220
@@ -66,6 +66,10 @@ function buildDust(count) {
 
 export default function AmbientVoidBackground() {
   const mountRef = useRef(null)
+  const { pathname } = useLocation()
+  const refreshCoverageRef = useRef(null)
+
+  useEffect(() => { refreshCoverageRef.current?.() }, [pathname])
 
   useEffect(() => {
     const mount = mountRef.current
@@ -95,6 +99,8 @@ export default function AmbientVoidBackground() {
     handleResize()
 
     let rafId = null
+    let coverageFrame = null
+    let covered = false
     const clock = new THREE.Clock()
 
     function renderFrame() {
@@ -124,7 +130,7 @@ export default function AmbientVoidBackground() {
     }
 
     function handleVisibilityChange() {
-      if (document.hidden) {
+      if (document.hidden || covered) {
         stopLoop()
       } else {
         startLoop()
@@ -132,10 +138,27 @@ export default function AmbientVoidBackground() {
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
-    startLoop()
+    function updateCoverage() {
+      coverageFrame = null
+      const journey = document.querySelector('.studio-journey')
+      const bounds = journey?.getBoundingClientRect()
+      covered = Boolean(bounds && bounds.top <= 0 && bounds.bottom >= window.innerHeight)
+      handleVisibilityChange()
+    }
+    function scheduleCoverage() {
+      if (coverageFrame === null) coverageFrame = requestAnimationFrame(updateCoverage)
+    }
+    refreshCoverageRef.current = scheduleCoverage
+    window.addEventListener('scroll', scheduleCoverage, { passive: true })
+    window.addEventListener('resize', scheduleCoverage)
+    updateCoverage()
 
     return () => {
       stopLoop()
+      refreshCoverageRef.current = null
+      if (coverageFrame !== null) cancelAnimationFrame(coverageFrame)
+      window.removeEventListener('scroll', scheduleCoverage)
+      window.removeEventListener('resize', scheduleCoverage)
       window.removeEventListener('resize', handleResize)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       dust.geometry.dispose()

@@ -1,3 +1,5 @@
+import MotionChapter from "./MotionChapter";
+import "./MotionPreview.css";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -31,15 +33,16 @@ const benefits = [
   },
 ];
 
-const sandwichImage = `${import.meta.env.BASE_URL}images/noon-chicken-sandwich.png`;
+const sandwichImage = `${import.meta.env.BASE_URL}images/noon-chicken-sandwich-optimized.webp`;
 
-function MotionPreview() {
+export function MotionPreview({ active = true }) {
   const frameRef = useRef(null);
   const sandwichRef = useRef(null);
   const headlineRef = useRef(null);
   const detailsRef = useRef(null);
   const progressRef = useRef(null);
   const animationsRef = useRef([]);
+  const playbackRef = useRef("ready");
   const [playback, setPlayback] = useState("ready");
 
   useEffect(() => {
@@ -59,6 +62,8 @@ function MotionPreview() {
     function setup() {
       observer?.disconnect();
       clearAnimations();
+
+      if (!active) { setPlayback("ready"); return; }
 
       if (preference.matches) {
         setPlayback("reduced");
@@ -142,7 +147,17 @@ function MotionPreview() {
       preference.removeEventListener("change", setup);
       clearAnimations();
     };
-  }, []);
+  }, [active]);
+
+  useEffect(() => { playbackRef.current = playback; }, [playback]);
+  useEffect(() => {
+    const sync = () => {
+      if (!active || document.hidden) animationsRef.current.forEach(a => a.pause());
+      else if (playbackRef.current === 'playing') animationsRef.current.forEach(a => a.play());
+    };
+    sync(); document.addEventListener('visibilitychange', sync);
+    return () => document.removeEventListener('visibilitychange', sync);
+  }, [active]);
 
   function togglePlayback() {
     if (playback === "playing") {
@@ -178,7 +193,7 @@ function MotionPreview() {
         <div
           role="img"
           aria-label="NOON & CO. lunch promotion: crispy chicken sandwich, served weekdays from 11 AM to 2 PM."
-          className="relative isolate aspect-[16/10] overflow-hidden bg-[#7A160E] sm:aspect-[16/9]"
+          className="motion-preview-art relative isolate aspect-[16/10] overflow-hidden bg-[#7A160E] sm:aspect-[16/9]"
         >
           {/* Animated artwork is described by the accessible label above. */}
           <div aria-hidden="true">
@@ -192,6 +207,8 @@ function MotionPreview() {
             <img
               ref={sandwichRef}
               src={sandwichImage}
+              srcSet={`${import.meta.env.BASE_URL}images/noon-chicken-sandwich-optimized-640.webp 640w, ${import.meta.env.BASE_URL}images/noon-chicken-sandwich-optimized-960.webp 960w, ${sandwichImage} 1536w`}
+              sizes="(min-width: 1280px) 480px, (min-width: 1024px) 36vw, 75vw"
               alt=""
               width={1536}
               height={1024}
@@ -202,7 +219,7 @@ function MotionPreview() {
 
             <div
               ref={headlineRef}
-              className="absolute top-[17%] left-[6%] z-10 text-[clamp(42px,6vw,86px)] leading-[1.08] font-extrabold tracking-normal text-[#FFF4DE]"
+              className="motion-preview-art__headline"
             >
               Lunch,
               <br />
@@ -211,12 +228,12 @@ function MotionPreview() {
 
             <div
               ref={detailsRef}
-              className="absolute bottom-[9%] left-[6%] z-20 w-[53%] border-t border-[#FFF4DE]/65 pt-3"
+              className="motion-preview-art__details"
             >
-              <p className="text-[clamp(9px,1.05vw,14px)] leading-snug font-bold tracking-[0.06em] text-[#FFF4DE]">
+              <p className="motion-preview-art__product">
                 CRISPY CHICKEN SANDWICH
               </p>
-              <p className="mt-2 text-[clamp(9px,1.05vw,14px)] leading-snug font-bold tracking-[0.06em] text-[#FFD301]">
+              <p className="motion-preview-art__hours">
                 WEEKDAYS · 11 AM–2 PM
               </p>
             </div>
@@ -224,12 +241,12 @@ function MotionPreview() {
         </div>
 
         <div className="flex min-h-14 items-center gap-4 bg-[#160907] px-4">
-          {playback === "reduced" ? (
+          {playback === "reduced" && (
             <span className="py-3 text-xs text-white/65">
               Still preview · reduced motion
             </span>
-          ) : (
-            <>
+          )}
+            <div style={{ display: playback === "reduced" ? "none" : "contents" }}>
               <button
                 type="button"
                 onClick={togglePlayback}
@@ -249,8 +266,7 @@ function MotionPreview() {
                   className="h-full origin-left bg-[#FFD301]"
                 />
               </div>
-            </>
-          )}
+            </div>
         </div>
       </div>
 
@@ -261,7 +277,8 @@ function MotionPreview() {
   );
 }
 
-export default function MotionDesignBenefits() {
+export default function MotionDesignBenefits({ journey = false, progress = 0, entrance = 1, active = true, preload = false, exitProgress = 0 }) {
+  if (journey) return <MotionChapter benefits={benefits} progress={progress} entrance={entrance} active={active} preload={preload} exitProgress={exitProgress} Preview={MotionPreview} />;
   return (
     <section
       id="motion-design"

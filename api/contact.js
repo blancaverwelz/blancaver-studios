@@ -54,7 +54,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' })
   }
 
-  const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {}
+  let body
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {}
+  } catch {
+    return res.status(400).json({ error: 'Invalid request body.' })
+  }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return res.status(400).json({ error: 'Invalid request body.' })
+  }
+  const textFields = ['name', 'email', 'company', 'message', 'budget', 'timeline', 'source', 'details', 'website', 'recaptchaToken']
+  if (textFields.some(key => body[key] !== undefined && typeof body[key] !== 'string')) {
+    return res.status(400).json({ error: 'Please fill in all fields correctly.' })
+  }
   const {
     name = '',
     email = '',
@@ -82,7 +94,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Please fill in all required fields correctly.' })
   }
 
-  const recaptcha = await verifyRecaptcha(recaptchaToken)
+  let recaptcha
+  try {
+    recaptcha = await verifyRecaptcha(recaptchaToken)
+  } catch {
+    return res.status(502).json({ error: 'Spam check is temporarily unavailable. Please try again.' })
+  }
   if (!recaptcha.ok) {
     return res.status(400).json({ error: 'Spam check failed. Please try again.' })
   }

@@ -1,0 +1,7 @@
+/* Heading sizes inherit the shared h2/h3 rules in index.css. */
+.service-heading span {
+  color: #ffd301;
+}
+
+.service-heading .website-chapter__open-line { color: inherit; }
+.service-heading__keep { white-space: nowrap; }

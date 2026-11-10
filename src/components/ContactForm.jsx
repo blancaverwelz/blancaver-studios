@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Lock, CheckCircle2, AlertCircle } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react'
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY
 
@@ -49,7 +49,6 @@ export default function ContactForm() {
   const [status, setStatus] = useState('IDLE') // IDLE | SUBMITTING | SUCCESS | ERROR
   const [errorMessage, setErrorMessage] = useState('')
   const [fieldErrors, setFieldErrors] = useState({})
-  const btnRef = useRef(null)
 
   const recaptchaReady = useRecaptcha(RECAPTCHA_SITE_KEY)
 
@@ -66,7 +65,7 @@ export default function ContactForm() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) {
       errors.email = 'That email address looks incomplete.'
     }
-    if (!fields.message.trim()) errors.message = 'Tell me a little about the project.'
+    if (!fields.message.trim()) errors.message = 'Tell us a little about the project.'
     return errors
   }
 
@@ -116,35 +115,20 @@ export default function ContactForm() {
     }
   }
 
-  function handleMagneticMove(e) {
-    const btn = btnRef.current
-    if (!btn) return
-    const rect = btn.getBoundingClientRect()
-    const x = e.clientX - rect.left - rect.width / 2
-    const y = e.clientY - rect.top - rect.height / 2
-    btn.style.transform = `translate(${x * 0.12}px, ${y * 0.3}px)`
-  }
-
-  function handleMagneticLeave() {
-    const btn = btnRef.current
-    if (!btn) return
-    btn.style.transform = 'translate(0, 0)'
-  }
-
   if (status === 'SUCCESS') {
     return (
-      <div className="contact-card flex min-h-[420px] flex-col items-center justify-center gap-4 rounded-2xl bg-[#0d0f16] p-8 text-center ring-1 ring-white/10 sm:p-12">
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-neon-teal)]/15 text-[var(--color-neon-teal)]">
+      <div className="contact-success" role="status" aria-live="polite">
+        <span className="contact-success-icon">
           <CheckCircle2 size={28} strokeWidth={1.75} />
         </span>
-        <h3 className="text-xl font-bold text-white sm:text-2xl">Thanks!</h3>
-        <p className="max-w-sm text-sm leading-relaxed text-white/60 sm:text-base">
-          I&rsquo;ve received your message and I&rsquo;ll get back to you within 24–48 hours.
+        <h3 className="text-white ">Thanks!</h3>
+        <p className="max-w-sm text-white/60 ">
+          We&rsquo;ve received your message and we&rsquo;ll get back to you within 24–48 hours.
         </p>
         <button
           type="button"
           onClick={() => setStatus('IDLE')}
-          className="mt-2 text-xs font-semibold tracking-wide text-[var(--color-neon-teal)] uppercase hover:underline"
+          className="mt-2 text-[var(--color-neon-teal)] uppercase hover:underline"
         >
           Send another message
         </button>
@@ -156,7 +140,7 @@ export default function ContactForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="contact-card space-y-5 rounded-2xl bg-[#0d0f16] p-6 ring-1 ring-white/10 sm:p-8"
+      className="contact-form" aria-labelledby="contact-form-heading" aria-busy={status === 'SUBMITTING'}
     >
       {/* Honeypot field — visually hidden, off the tab order, ignored by real users */}
       <div className="hp-field" aria-hidden="true">
@@ -172,70 +156,78 @@ export default function ContactForm() {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="contact-fields-row">
         <div className="field-group">
-          <label className="field-label" htmlFor="name">
+          <label className="contact-sr-only" htmlFor="name">
             Your Name <span className="text-[var(--color-neon-teal)]">*</span>
           </label>
           <input
-            id="name"
+          id="name"
+          required
+          aria-invalid={Boolean(fieldErrors.name)}
+          aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+          autoComplete="name"
             name="name"
             type="text"
             placeholder="Your name"
-            className="field-input"
+            className="contact-input"
             value={fields.name}
             onChange={handleChange}
           />
-          {fieldErrors.name && <p className="field-error">{fieldErrors.name}</p>}
+          {fieldErrors.name && <p id="name-error" className="field-error" role="alert">{fieldErrors.name}</p>}
         </div>
 
         <div className="field-group">
-          <label className="field-label" htmlFor="email">
+          <label className="contact-sr-only" htmlFor="email">
             Email Address <span className="text-[var(--color-neon-teal)]">*</span>
           </label>
           <input
-            id="email"
+          id="email"
+          required
+          aria-invalid={Boolean(fieldErrors.email)}
+          aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+          autoComplete="email"
             name="email"
             type="email"
             placeholder="you@company.com"
-            className="field-input"
+            className="contact-input"
             value={fields.email}
             onChange={handleChange}
           />
-          {fieldErrors.email && <p className="field-error">{fieldErrors.email}</p>}
+          {fieldErrors.email && <p id="email-error" className="field-error" role="alert">{fieldErrors.email}</p>}
         </div>
       </div>
 
       <div className="field-group">
-        <label className="field-label" htmlFor="message">
-          What Can I Help You With? <span className="text-[var(--color-neon-teal)]">*</span>
+        <label className="contact-sr-only" htmlFor="message">
+          What Can We Help You With? <span className="text-[var(--color-neon-teal)]">*</span>
         </label>
         <textarea
           id="message"
+          required
+          aria-invalid={Boolean(fieldErrors.message)}
+          aria-describedby={fieldErrors.message ? 'message-error' : undefined}
           name="message"
-          rows={4}
-          placeholder="Tell me about your project, goals, or ideas..."
-          className="field-input resize-y"
+          rows={3}
+          placeholder="Tell us about your project, goals, or ideas..."
+          className="contact-input contact-input--message"
           value={fields.message}
           onChange={handleChange}
         />
-        {fieldErrors.message && <p className="field-error">{fieldErrors.message}</p>}
+        {fieldErrors.message && <p id="message-error" className="field-error" role="alert">{fieldErrors.message}</p>}
       </div>
 
       {status === 'ERROR' && (
-        <div className="flex items-start gap-2 rounded-lg border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div role="alert" className="flex items-start gap-2 rounded-lg border border-red-500/25 bg-red-500/10 px-4 py-3 text-red-200">
           <AlertCircle size={16} className="mt-0.5 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       <button
-        ref={btnRef}
         type="submit"
         disabled={status === 'SUBMITTING' || (Boolean(RECAPTCHA_SITE_KEY) && !recaptchaReady)}
-        onMouseMove={handleMagneticMove}
-        onMouseLeave={handleMagneticLeave}
-        className="magnetic-btn group flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-neon-teal)] px-6 py-4 text-sm font-bold tracking-wide text-[#05060a] uppercase shadow-[0_0_24px_rgba(255,211,1,0.28),0_0_52px_rgba(255,211,1,0.12)] transition-colors duration-300 hover:bg-[#ffe05a] disabled:cursor-not-allowed disabled:opacity-60"
+        className="contact-submit"
       >
         {status === 'SUBMITTING' ? 'Sending…' : 'Send Message'}
         {status !== 'SUBMITTING' && (
@@ -247,13 +239,9 @@ export default function ContactForm() {
         )}
       </button>
 
-      <p className="flex items-center gap-2 text-xs text-white/35">
-        <Lock size={13} className="shrink-0 text-white/30" />
-        Your information is safe and will never be shared with anyone.
-      </p>
 
       {RECAPTCHA_SITE_KEY && (
-        <p className="text-center text-[10px] leading-relaxed text-white/25">
+        <p className="contact-legal">
           This site is protected by reCAPTCHA and the Google{' '}
           <a
             href="https://policies.google.com/privacy"

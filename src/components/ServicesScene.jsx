@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { trustFrame } from "./studioTrust";
 
 /* ------------------------------------------------------------------ */
 /* "What I Do" 3D constellation scene.                                 */
@@ -204,7 +205,12 @@ function buildShape(shapeType, color) {
   return wrapper;
 }
 
-export default function ServicesScene({ services }) {
+export default function ServicesScene({
+  services,
+  scrollIndex,
+  active = true,
+  exitProgress = 0,
+}) {
   const stageRef = useRef(null);
   const canvasRef = useRef(null);
   const labelRefs = useRef([]);
@@ -216,6 +222,7 @@ export default function ServicesScene({ services }) {
     typeof window !== "undefined" &&
     window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
 
+  const [webglUnavailable, setWebglUnavailable] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(initialIsMobile);
@@ -227,6 +234,16 @@ export default function ServicesScene({ services }) {
 
   // Mirrors of state for use inside the RAF loop's closures without going
   // through React re-renders or stale-closure bugs.
+  const exitRef = useRef(exitProgress);
+  useEffect(() => {
+    exitRef.current = exitProgress;
+  }, [exitProgress]);
+  const sceneActiveRef = useRef(active);
+  const syncLoopRef = useRef(null);
+  useEffect(() => {
+    sceneActiveRef.current = active;
+    syncLoopRef.current?.();
+  }, [active]);
   const activeIndexRef = useRef(activeIndex);
   const mobileIndexRef = useRef(mobileIndex);
   const isMobileRef = useRef(isMobile);
@@ -246,12 +263,21 @@ export default function ServicesScene({ services }) {
   const goMobileRef = useRef(() => {});
 
   setActiveRef.current = (i) => {
+    if (exitRef.current > 0) return;
     setActiveIndex((prev) => (prev === i ? -1 : i));
   };
   goMobileRef.current = (i) => {
-    setMobileIndex((i + services.length) % services.length);
+    const next = (i + services.length) % services.length;
+    if (scrollIndex !== undefined) return;
+    setMobileIndex(next);
     setActiveIndex(-1);
   };
+
+  useEffect(() => {
+    if (scrollIndex === undefined) return;
+    setMobileIndex(scrollIndex);
+    setActiveIndex(-1);
+  }, [scrollIndex]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -272,11 +298,17 @@ export default function ServicesScene({ services }) {
     const camera = new THREE.PerspectiveCamera(48, W / H, 0.1, 100);
     camera.position.set(0, 0, 9);
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true,
-    });
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+      });
+    } catch {
+      setWebglUnavailable(true);
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(W, H);
 
@@ -486,6 +518,7 @@ export default function ServicesScene({ services }) {
     // its label does.
     const pointerNdc = new THREE.Vector2();
     function handleCanvasClick(e) {
+      if (performance.now() < suppressClickUntil) return;
       if (isMobileRef.current) {
         setActiveRef.current(mobileIndexRef.current);
         return;
@@ -503,14 +536,22 @@ export default function ServicesScene({ services }) {
     canvas.addEventListener("click", handleCanvasClick);
 
     // Swipe.
-    let touchStartX = null;
+    let touchStartX = null,
+      touchStartY = null,
+      suppressClickUntil = 0;
     function handleTouchStart(e) {
-      if (isMobileRef.current) touchStartX = e.touches[0].clientX;
+      if (isMobileRef.current) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
     }
     function handleTouchEnd(e) {
       if (!isMobileRef.current || touchStartX === null) return;
       const dx = e.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(dx) > 40)
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10)
+        suppressClickUntil = performance.now() + 400;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3)
         goMobileRef.current(mobileIndexRef.current + (dx < 0 ? 1 : -1));
       touchStartX = null;
     }
@@ -523,6 +564,16 @@ export default function ServicesScene({ services }) {
     document.addEventListener("keydown", handleKeyDown);
 
     const vec = new THREE.Vector3();
+    const LABEL_IN = [
+      [-90, -60],
+      [90, -60],
+      [-110, 30],
+      [110, 30],
+      [0, 80],
+      [-60, 75],
+    ];
+    let labelEntrance = 0;
+    let labelsWereActive = false;
     function updateLabelPositions() {
       shapes.forEach((s, i) => {
         const el = labelRefs.current[i];
@@ -532,19 +583,47 @@ export default function ServicesScene({ services }) {
         const x = (vec.x * 0.5 + 0.5) * W;
         const y = (-vec.y * 0.5 + 0.5) * H - 34;
         const scale = THREE.MathUtils.clamp(1 - vec.z * 0.3, 0.65, 1.1);
-        el.style.transform = `translate(-50%, -100%) translate(${x}px, ${y}px) scale(${scale})`;
+        const [ox, oy] = LABEL_IN[i % LABEL_IN.length];
+        const t = labelEntrance * labelEntrance;
+        el.style.transition = "none";
+        el.style.transform = `translate(-50%, -100%) translate(${x + ox * (1 - t)}px, ${y + oy * (1 - t)}px) scale(${scale})`;
       });
     }
 
     const clock = new THREE.Clock();
     let rafId = null;
     let lastT = 0;
+    let inView = false;
+    let exitSnapshot = null;
 
     function tick() {
+      rafId = null;
+      if (!inView || document.hidden || !sceneActiveRef.current) return;
       rafId = requestAnimationFrame(tick);
-      const t = clock.getElapsedTime();
+      const wallTime = clock.getElapsedTime();
+      const exit = exitRef.current;
+      if (exit > 0 && !exitSnapshot) {
+        exitSnapshot = {
+          time: wallTime,
+          camera: camera.position.clone(),
+          look: camLookAt.clone(),
+          group: group.rotation.clone(),
+          shapes: shapes.map((s) => ({
+            position: s.wrapper.position.clone(),
+            rotation: s.wrapper.rotation.clone(),
+            scale: s.wrapper.scale.clone(),
+          })),
+        };
+      }
+      if (exit === 0) exitSnapshot = null;
+      const t = exitSnapshot?.time ?? wallTime;
       const delta = Math.min(t - lastT, 0.1); // clamp so a resumed-from-paused tab doesn't jump
       lastT = t;
+      const nowActive = sceneActiveRef.current;
+      if (nowActive && !labelsWereActive) labelEntrance = 0;
+      labelsWereActive = nowActive;
+      if (inView && nowActive)
+        labelEntrance = Math.min(1, labelEntrance + delta * 1.4);
       const mobile = isMobileRef.current;
       const active = activeIndexRef.current;
       const mobileIdx = mobileIndexRef.current;
@@ -676,12 +755,39 @@ export default function ServicesScene({ services }) {
       camera.position.z += (camTarget.z - camera.position.z) * lerpSpeed;
       camera.lookAt(camLookAt);
 
+      if (exitSnapshot && !mobile) {
+        const amount = trustFrame(exit).converge;
+        camera.position
+          .copy(exitSnapshot.camera)
+          .lerp(new THREE.Vector3(0, 0, 9), amount);
+        camLookAt.copy(exitSnapshot.look).multiplyScalar(1 - amount);
+        camera.lookAt(camLookAt);
+        group.rotation.set(
+          exitSnapshot.group.x * (1 - amount),
+          exitSnapshot.group.y * (1 - amount),
+          exitSnapshot.group.z * (1 - amount),
+        );
+        shapes.forEach((s, i) => {
+          const saved = exitSnapshot.shapes[i];
+          s.wrapper.position.copy(saved.position).multiplyScalar(1 - amount);
+          s.wrapper.rotation.copy(saved.rotation);
+          s.wrapper.rotation.y += amount * 0.9 * (i % 2 ? 1 : -1);
+          s.wrapper.scale.copy(saved.scale).multiplyScalar(1 - amount * 0.48);
+        });
+        sparkPool.forEach((s) => {
+          s.mesh.visible = false;
+          s.line.visible = false;
+        });
+      }
       if (!mobile) updateLabelPositions();
       renderer.render(scene, camera);
     }
 
     function startLoop() {
-      if (rafId === null) tick();
+      if (rafId === null) {
+        lastT = clock.getElapsedTime();
+        tick();
+      }
     }
     function stopLoop() {
       if (rafId !== null) {
@@ -690,19 +796,21 @@ export default function ServicesScene({ services }) {
       }
     }
 
-    // Pause the RAF loop entirely while the section is scrolled out of
-    // view — the page already runs EmblemScene's WebGL context above the
-    // fold, so an off-screen second context left animating is the likeliest
-    // way this section could cost frame rate.
+    function syncLoop() {
+      if (inView && sceneActiveRef.current && !document.hidden) startLoop();
+      else stopLoop();
+    }
+    syncLoopRef.current = syncLoop;
+    document.addEventListener("visibilitychange", syncLoop);
+    // Hidden journey layers still intersect; active handles that case.
     const intersectionObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) startLoop();
-        else stopLoop();
+        inView = entry.isIntersecting;
+        syncLoop();
       },
       { threshold: 0.01 },
     );
     intersectionObserver.observe(stage);
-    startLoop();
 
     function handleResize() {
       W = stage.clientWidth || 1;
@@ -716,6 +824,8 @@ export default function ServicesScene({ services }) {
 
     return () => {
       stopLoop();
+      syncLoopRef.current = null;
+      document.removeEventListener("visibilitychange", syncLoop);
       mq.removeEventListener("change", applyMode);
       stage.removeEventListener("mousemove", handleMouseMove);
       stage.removeEventListener("mouseleave", handleMouseLeave);
@@ -744,12 +854,30 @@ export default function ServicesScene({ services }) {
   // source of truth without extra re-renders.
   useEffect(() => {
     const svc = services[mobileIndex];
-    if (mNumRef.current) mNumRef.current.textContent = svc.num;
+    if (mNumRef.current) {
+      mNumRef.current.textContent =
+        scrollIndex !== undefined
+          ? `${svc.num} / ${String(services.length).padStart(2, "0")}`
+          : svc.num;
+    }
     if (mTitleRef.current) mTitleRef.current.textContent = svc.title;
     dotRefs.current.forEach((d, idx) => {
       if (d) d.classList.toggle("active", idx === mobileIndex);
     });
-  }, [mobileIndex, services]);
+  }, [mobileIndex, services, scrollIndex]);
+
+  if (webglUnavailable)
+    return (
+      <div className="services-fallback">
+        {services.map((service) => (
+          <article key={service.num}>
+            <h3>{service.title}</h3>
+            <p>{service.desc}</p>
+            <a href={`#${service.benefitsId}`}>Explore service ↗</a>
+          </article>
+        ))}
+      </div>
+    );
 
   return (
     <>
@@ -781,6 +909,9 @@ export default function ServicesScene({ services }) {
             <button
               type="button"
               className="services-arrow-btn"
+              style={{
+                display: scrollIndex !== undefined ? "none" : undefined,
+              }}
               tabIndex={isMobile ? 0 : -1}
               aria-label="Previous service"
               onClick={() => goMobileRef.current(mobileIndex - 1)}
@@ -798,6 +929,9 @@ export default function ServicesScene({ services }) {
             <button
               type="button"
               className="services-arrow-btn"
+              style={{
+                display: scrollIndex !== undefined ? "none" : undefined,
+              }}
               tabIndex={isMobile ? 0 : -1}
               aria-label="Next service"
               onClick={() => goMobileRef.current(mobileIndex + 1)}
@@ -805,17 +939,23 @@ export default function ServicesScene({ services }) {
               &#8594;
             </button>
           </div>
-          <div className="services-dots">
-            {services.map((svc, i) => (
-              <span
-                key={svc.num}
-                ref={(el) => {
-                  dotRefs.current[i] = el;
-                }}
-                className={`services-dot${i === mobileIndex ? " active" : ""}`}
-              />
-            ))}
-          </div>
+          {scrollIndex !== undefined ? (
+            <p className="services-hint">
+              Scroll to explore services ↓ · tap for details
+            </p>
+          ) : (
+            <div className="services-dots">
+              {services.map((svc, i) => (
+                <span
+                  key={svc.num}
+                  ref={(el) => {
+                    dotRefs.current[i] = el;
+                  }}
+                  className={`services-dot${i === mobileIndex ? " active" : ""}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className={`services-panel${activeIndex !== -1 ? " open" : ""}`}>
@@ -853,7 +993,9 @@ export default function ServicesScene({ services }) {
           )}
         </div>
       </div>
-      <p className="services-hint">{hint}</p>
+      {!(isMobile && scrollIndex !== undefined) && (
+        <p className="services-hint">{hint}</p>
+      )}
     </>
   );
 }

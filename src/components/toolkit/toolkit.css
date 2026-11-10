@@ -1,0 +1,377 @@
+/* Toolkit content: intro, four scenes, closing. Hero rules live in pages/Toolkit.css. */
+.toolkit-content {
+  padding-top: 90px;
+  scroll-margin-top: 105px;
+}
+.toolkit-intro,
+.toolkit-closing {
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: 6vw;
+}
+.toolkit-intro {
+  margin-bottom: 56px;
+}
+.toolkit-page .toolkit-intro h2 {
+  max-width: 780px;
+  font-size: clamp(30px, 4.2vw, 58px);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+  margin: 0;
+  font-weight: 650;
+}
+.toolkit-intro__count {
+  margin: 18px 0 0;
+  color: #9ea9ae;
+  font-size: 15px;
+}
+.toolkit-pause {
+  margin-top: 24px;
+  padding: 6px 9px;
+  background: transparent;
+  border: 1px solid #ffffff18;
+  border-radius: 3px;
+  color: #a8b0b8;
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.toolkit-pause:hover {
+  opacity: 1;
+  border-color: #ffd30155;
+  color: #d0d5da;
+}
+
+.toolkit-pause:focus-visible {
+  outline: 2px solid #ffd301;
+  outline-offset: 3px;
+  opacity: 1;
+}
+.toolkit-pause:hover,
+.toolkit-pause[aria-pressed="true"] {
+  color: #fff;
+  background: #ffffff12;
+}
+
+/* Scene shell: copy overlays a WebGL stage (hardware is real 3D) */
+.tk-scene {
+  position: relative;
+  width: min(100%, 2200px);
+  margin-inline: auto;
+}
+.tk-scene__stage {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 1920 / 720;
+  overflow: hidden;
+  isolation: isolate;
+  background: #06080a;
+}
+.tk-world,
+.tk-world canvas,
+.tk-scene__shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.tk-world canvas {
+  display: block;
+}
+.tk-scene__shade {
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, #090b0d, transparent 12%, transparent 88%, #090b0d),
+    linear-gradient(90deg, #06080a99, transparent 38%);
+}
+.tk-scene--copy-right .tk-scene__shade {
+  background:
+    linear-gradient(180deg, #090b0d, transparent 12%, transparent 88%, #090b0d),
+    linear-gradient(270deg, #06080a99, transparent 38%);
+}
+
+/* Copy */
+.tk-scene__copy {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  width: min(32%, 460px);
+  transform: translateY(-50%);
+  padding-left: 22px;
+  border-left: 1px solid #ffd30140;
+}
+.tk-scene--copy-left .tk-scene__copy {
+  left: 7%;
+}
+.tk-scene--copy-right .tk-scene__copy {
+  right: 7%;
+}
+.tk-scene__number {
+  display: block;
+  margin-bottom: 18px;
+  color: #ffd301;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.2em;
+}
+.toolkit-page .tk-scene__copy h2 {
+  margin: 0;
+  font-size: clamp(28px, 3.2vw, 58px);
+  font-weight: 650;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.tk-scene__tagline {
+  margin: 14px 0 0;
+  color: #c4c9cc;
+  font-size: clamp(14px, 1.15vw, 19px);
+  line-height: 1.45;
+}
+.tk-detail {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+  min-height: 48px;
+}
+.tk-detail .tk-logo {
+  flex: none;
+  width: 34px;
+  height: 34px;
+}
+.tk-detail p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #c4c9cc;
+}
+.tk-detail strong {
+  color: #fff;
+  font-weight: 650;
+  font-size: 15px;
+}
+.tk-detail span {
+  display: block;
+}
+
+/* Labels sit on each module's projected front face */
+.tk-scene__tools {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.tk-group {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: opacity 400ms ease;
+}
+.tk-scene__stage[data-world="idle"] .tk-group {
+  opacity: 0;
+}
+.tk-tool {
+  position: absolute;
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+  width: var(--w, 84px);
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+}
+.tk-tool__button {
+  /* Logo size as a share of the module face width; --tk-logo-max is its width cap. Mobile overrides both. */
+  --tk-logo-scale: 0.4;
+  --tk-logo-max: 62%;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--w, 84px) * 0.05);
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  font: 600 clamp(10px, calc(var(--w, 84px) * 0.135), 15px) / 1.15
+    var(--font-sans);
+  text-align: center;
+  text-shadow:
+    0 1px 8px #000c,
+    0 0 2px #0008;
+  cursor: pointer;
+}
+.tk-tool__button:focus-visible {
+  outline: 2px solid #ffd301;
+  outline-offset: 2px;
+}
+.tk-tool__button[aria-pressed="true"] .tk-tool__name {
+  color: #ffd301;
+}
+.tk-logo {
+  display: block;
+  width: auto;
+  height: calc(var(--w, 84px) * var(--tk-logo-scale, 0.4));
+  max-width: var(--tk-logo-max, 62%);
+  object-fit: contain;
+  filter: drop-shadow(0 1px 6px #000a);
+}
+.tk-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* No WebGL: plain framed tiles so every tool stays usable */
+.tk-scene__stage[data-world="fallback"] .tk-scene__tools {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tk-scene__stage[data-world="fallback"] .tk-group {
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  padding: 16px;
+}
+.tk-scene__stage[data-world="fallback"] .tk-tool {
+  position: static;
+  width: 96px;
+  transform: none;
+}
+.tk-scene__stage[data-world="fallback"] .tk-tool__button {
+  border: 1px solid #ffd30040;
+  background: #0c0f12;
+}
+
+/* Closing */
+.toolkit-closing {
+  text-align: center;
+  padding-top: 75px;
+  padding-bottom: 115px;
+  border-top: 1px solid #30363a;
+}
+.toolkit-page .toolkit-closing h2 {
+  font-size: clamp(40px, 6vw, 78px);
+  font-weight: 650;
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+  margin: 0 0 35px;
+}
+.toolkit-closing h2 span {
+  color: #ffd301;
+}
+.toolkit-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 24px;
+  border-radius: 0.5rem;
+  background: #ffd301;
+  color: #111;
+  border: 1px solid rgba(255, 211, 1, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin-top: 28px;
+  min-height: 48px;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease;
+}
+.toolkit-cta:hover {
+  background: #ffe04b;
+}
+
+/* Portrait recomposition: copy above the plate, never a shrunken desktop scene */
+@media (max-width: 760px) {
+  .toolkit-content {
+    padding-top: 64px;
+  }
+  .toolkit-intro {
+    padding-inline: 24px;
+    margin-bottom: 36px;
+  }
+  .tk-scene {
+    display: flex;
+    flex-direction: column;
+  }
+  .tk-scene__stage {
+    aspect-ratio: 4 / 5;
+  }
+  .tk-scene__copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    margin: 28px 24px 18px;
+    transform: none;
+  }
+  .tk-scene--copy-left .tk-scene__copy,
+  .tk-scene--copy-right .tk-scene__copy {
+    left: auto;
+    right: auto;
+  }
+  .tk-scene__shade,
+  .tk-scene--copy-right .tk-scene__shade {
+    background: linear-gradient(
+      180deg,
+      #090b0d,
+      transparent 14%,
+      transparent 86%,
+      #090b0d
+    );
+  }
+  .toolkit-closing {
+    padding-inline: 24px;
+    padding-top: 60px;
+    padding-bottom: 75px;
+  }
+
+  /* Mobile: logos only, centred on the module face. Names stay in the accessibility tree. */
+  .tk-tool__button {
+    --tk-logo-scale: 0.5;
+    --tk-logo-max: 66%;
+    gap: 0;
+  }
+  /* Section 1 cubes are scaled up on mobile, so their logos get a smaller share of the face. */
+  .tk-scene--interface .tk-tool__button {
+    --tk-logo-scale: 0.42;
+    --tk-logo-max: 58%;
+  }
+  .tk-tool__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+@media (max-width: 680px) {
+  .toolkit-cta {
+    padding: 12px 18px;
+    min-height: 44px;
+    font-size: 11.5px;
+    border-radius: 0.75rem;
+  }
+}

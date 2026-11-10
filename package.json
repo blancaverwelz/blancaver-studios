@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "oxlint",
+    "lint": "oxlint src api tests",
     "preview": "vite preview",
-    "deploy:check": "vite build && echo 'Open dist/index.html asset paths — they should start with /blancaver-studios/'"
+    "deploy:check": "vite build && echo 'Open dist/index.html asset paths — they should start with /blancaver-studios/'",
+    "test:contact": "node --test tests/contact.test.mjs",
+    "test:toolkit": "node --test tests/toolkit-data.test.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.24.0",

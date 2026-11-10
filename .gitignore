@@ -23,3 +23,7 @@ public/images/brand-banner.original.jpg
 yarn-debug.log*
 yarn-error.log*
 /docs/
+
+# Project CSS directive metadata (keep other personal editor settings ignored).
+!.vscode/settings.json
+!.vscode/tailwind-css-data.json
